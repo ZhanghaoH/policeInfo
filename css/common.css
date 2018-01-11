@@ -1,0 +1,31 @@
+html,
+body {
+    /* height: 100%; */
+    background-color: #f8f8f8;
+}
+
+.container {
+    box-sizing: border-box;
+    padding-top: 25px;
+}
+
+.btn-wr {
+    padding: 0 15px;
+    margin-top: 25px;
+}
+
+.text-link {
+    color: #0BB20C;
+    text-decoration: underline;
+}
+
+.text-tips {
+    padding: 0 15px;
+    margin-top: 10px;
+}
+
+.img-vcode {
+    margin-bottom: 15px;
+    width: 225px;
+}
+

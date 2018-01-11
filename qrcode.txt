@@ -1,0 +1,17 @@
+通过policeNum获取用户接口 POST
+localhost:8080/jmth5/zzga/wxQRCode/getDeptUser?policeNum=410104198506090036
+
+
+{{"msg":"抱歉，没有获取到您的信息，请核对后再试或联系贵单位管理员！","errCode":"3"}
+{"msg":"您提交的数据传递不正确或为空！","errCode":"10"}
+
+
+{"msg":"成功","resultData":{"qrCodeUrl":"https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQEU8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyVDRtX1ZLU1I5N1AxMDAwMHcwNzgAAgRcrlBaAwQAAAAA","name":"任重远","policeNum":"410104198506090036","sceneld":"1"},"errCode":"0"}
+
+
+
+
+192.168.18.43:8089/jmth5/zzga/wxQRCode/getSubscribedDetials?sceneld=1
+
+{"msg":"抱歉，没有获取到您的推广结果。","errCode":"3"}
+{"resultData":[{"id":"e2addac551624bb6adfa47e14971c946","openId":"oqG0zw5UVMqrJsB7ol42x8ngoTc4","nickName":"任重远","subscribeDate":"2018-01-09 01:41:24"},{"id":"04e5ec467f3d4ffaba2e9ab34be02b31","openId":"oqG0zwxIZj2x7SwgidFFD57LbjtU","nickName":"任重远","subscribeDate":"2018-01-09 01:42:15"}],"errCode":"0","msg":"成功"}

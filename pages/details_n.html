@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/mescroll.min.css">
+    <title>推广详情</title>
+    <style>
+        .container {
+            box-sizing: border-box;
+            /* padding-top: 25px; */
+        }
+        
+        .page__hd {
+            padding: 8px 15px;
+        }
+        
+        .page__desc {
+            margin-top: 5px;
+            color: #888;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .page__title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 400;
+        }
+        
+        .text-strong {
+            font-size: 20px;
+            padding: 0 5px;
+            color: #0BB20C;
+        }
+        
+        .link-wr {
+            padding: 0 15px;
+            text-align: right;
+        }
+        
+        .duration-wr {
+            display: flex;
+            flex-flow: row wrap;
+            padding: 0 15px;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .weui-cell__ft {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .mescroll-empty {
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            text-align: center;
+        }
+        /*CSS代码*/
+        
+        label {
+            position: relative;
+            padding: 10px 15px 10px 25px;
+            cursor: pointer;
+            width: 120px;
+            box-sizing: border-box;
+        }
+        
+        label input {
+            display: none;
+        }
+        
+        label span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 16px;
+            height: 16px;
+            margin: auto;
+            border: 1px solid #ccc;
+            border-radius: 100%;
+        }
+        
+        label span:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 6px;
+            height: 6px;
+            margin: auto;
+            border-radius: 100%;
+            background: #fff;
+            -webkit-transform: scale(0);
+            transform: scale(0);
+            -webkit-transition: all .3s;
+            transition: all .3s;
+        }
+        
+        label input:checked+span {
+            border-color: #0BB20C;
+            background: #0BB20C;
+        }
+        
+        label input:checked+span:after {
+            -webkit-transform: scale(1);
+            transform: scale(1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mescroll" id="mescroll">
+        <div class="page__hd">
+            <h1 class="page__title"><span class=" text-strong" id="durationTxt"></span> 推广有效用户</h1>
+            <p class="page__desc">
+                总计<span class=" text-strong" id="count">0</span>人</p>
+        </div>
+        <div class="link-wr">
+            <a href="./tips.html" class="text-link">什么是有效用户？</a>
+        </div>
+        <!-- <div class="tips">
+      <div class="weui-cells__title">*有效统计是指从未关注过郑州警民通微信公众号的用户，通过警员的二维码进行第一次关注，该粉丝用户记为警员名下的有效统计数据。
+      </div>
+      <div class="weui-cells__title">*已关注郑州警民通公众号的粉丝，取消关注，通过警员二维码关注，不作为该警员二维码的有效统计。
+      </div>
+    </div> -->
+        <div class="duration-wr">
+            <label>
+        <input name="duration" type="radio" value="0" checked />
+        <span></span>全部</label>
+            <label>
+          <input name="duration" type="radio" value="1"/>
+          <span></span>今天</label>
+        </div>
+        <div class="duration-wr">
+            <label>
+            <input name="duration" type="radio" value="7"/>
+            <span></span>过去7天</label>
+            <label>
+              <input name="duration" type="radio" value="30"/>
+              <span></span>过去30天</label>
+        </div>
+        <div class="weui-cells" style="margin-top: 15px;">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>昵称</p>
+                </div>
+                <div class="weui-cell__ft" style="color:#000">
+                    <span>订阅时间</span>
+                </div>
+            </div>
+        </div>
+        <ul class="weui-cells" style="margin-top: 0px;" id="infoList">
+            <!-- <li class="weui-cell">
+        <!-- <div class="weui-cell__hd">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII="
+            alt="" style="width:20px;margin-right:5px;display:block">
+        </div> -->
+            <!-- <div class="weui-cell__bd">
+          <p>xxx</p>
+        </div>
+        <div class="weui-cell__ft">
+          <span>xxxx</span>
+        </div> -->
+            <!-- </li> -->
+            <!-- <li class="weui-cell">
+        <div class="weui-cell__bd">
+          <p>xxx</p>
+        </div>
+        <div class="weui-cell__ft">
+          <span>xxxx</span>
+        </div>
+      </li> -->
+        </ul>
+    </div>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery-weui.js"></script>
+<script src="../js/urlHead.js"></script>
+<script src="../js/mescroll.min.js"></script>
+<script>
+    $(function() {
+        let pageNum = 0;
+        let isRefresh = false
+        const infoList = $("#infoList")
+        let sceneld = getQueryString("sceneld")
+        let count = 0
+        let durationNum = 0
+
+        $('input[name=duration]').on("change", function() {
+            console.log($(this).val());
+            durationNum = $(this).val()
+                // mescroll.resetUpScroll();
+            mescroll.triggerDownScroll();
+            if (durationNum != 0) {
+                $("#durationTxt").text($(this).parent().text())
+            } else {
+                $("#durationTxt").text("")
+            }
+        })
+
+        let mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
+            //如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
+            //解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
+            down: {
+                // callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
+            },
+            up: {
+                callback: upCallback, //上拉加载的回调
+                isBounce: false, //如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置此项.解析(必读)
+                noMoreSize: 0,
+                empty: {
+                    warpId: 'infoList',
+                    icon: null,
+                    tip: "暂无相关数据~",
+                    btntext: "",
+                    btnClick: null,
+                    supportTap: false
+                },
+                // clearEmptyId: 'infoList',
+                page: {
+                    num: 0,
+                    size: 20,
+                    time: null
+                }
+            }
+        });
+
+        //下拉刷新的回调
+        function downCallback() {
+            console.log("refrech");
+            isRefresh = true
+            pageNum = 1
+            console.log(pageNum);
+            mescroll.setPageSize(20);
+            if (!sceneld) {
+
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: URL.testHead + URL.getSubscribedDetials,
+                    data: {
+                        "sceneld": sceneld,
+                        "page": 1,
+                        "duration": durationNum
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        //联网成功的回调,隐藏下拉刷新的状态;
+                        console.log(data);
+                        mescroll.endSuccess(); //无参
+                        if (data.errCode == 0) {
+                            //设置数据
+                            count = data.count
+                            $("#count").text(count)
+                            setPage(data.resultData, isRefresh); //自行实现 TODO
+                        } else {
+                            $.toast(data.msg)
+                        }
+                    },
+                    error: function(data) {
+                        //联网失败的回调,隐藏下拉刷新的状态
+                        mescroll.endErr();
+                    }
+                });
+            }
+
+        }
+
+        //上拉加载的回调 page = {num:1, size:10}; num:当前页 默认从1开始, size:每页数据条数,默认10
+        function upCallback(page) {
+            console.log(count);
+            // pageNum++
+            console.log(pageNum);
+            isRefresh = page.num == 1 ? true : false
+            mescroll.setPageSize(20);
+            $.ajax({
+                type: "POST",
+                url: URL.testHead + URL.getSubscribedDetials,
+                data: {
+                    "sceneld": sceneld,
+                    "page": page.num,
+                    "duration": durationNum
+                },
+                dataType: "json",
+                success: function(curPageData) {
+                    console.log(curPageData);
+                    //联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+                    //mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空,显示empty配置的内容;
+                    //列表如果无下一页数据,则提示无更多数据,(注意noMoreSize的配置)
+
+                    //方法一(推荐): 后台接口有返回列表的总页数 totalPage
+                    //必传参数(当前页的数据个数, 总页数)
+                    //mescroll.endByPage(curPageData.length, totalPage);
+
+                    //方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+                    //必传参数(当前页的数据个数, 总数据量)
+
+
+                    //方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+                    //必传参数(当前页的数据个数, 是否有下一页true/false)
+
+
+                    //方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.
+                    //如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据
+                    //如果传了hasNext,则翻到第二页即可显示无更多数据.
+                    //mescroll.endSuccess(curPageData.length);
+                    if (curPageData.errCode == 0) {
+                        //设置数据
+                        count = curPageData.count
+                        $("#count").text(count)
+                        setPage(curPageData.resultData, isRefresh); //自行实现 TODO
+                        console.log(curPageData.resultData.length, count, pageNum);
+                        mescroll.endBySize(curPageData.resultData.length, count);
+                        // if (curPageData.length < 20) {
+                        //   console.log("end");
+                        //   mescroll.endSuccess(curPageData.resultData.length);
+                        // }
+                    } else {
+                        // $.toast(curPageData.msg)
+                        // console.log("end");
+                        mescroll.endSuccess(0, false);
+                    }
+                },
+                error: function(e) {
+                    //联网失败的回调,隐藏下拉刷新和上拉加载的状态
+                    mescroll.endErr();
+                    pageNum--
+                }
+            });
+        }
+
+        function setPage(data, status) {
+            let liHtml = ''
+            data.forEach(element => {
+                liHtml +=
+                    `<li class="weui-cell">
+          <div class="weui-cell__bd">
+            <p>${element.nickName}</p>
+          </div>
+          <div class="weui-cell__ft">
+            <small>${element.subscribeDate}</small>
+          </div>
+        </li>`
+            });
+            if (status) {
+                infoList.html(liHtml)
+            } else {
+                infoList.append(liHtml)
+            }
+        }
+
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return decodeURI(r[2]);
+            }
+            return null;
+        }
+    })
+</script>
+
+</html>

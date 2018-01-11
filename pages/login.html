@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>登录</title>
+  <link rel="stylesheet" href="../css/weui.css" />
+  <link rel="stylesheet" href="../css/jquery-weui.css">
+  <link rel="stylesheet" href="../css/common.css" />
+  <style>
+    .text-tips {
+      text-align: right;
+    }
+    
+  </style>
+</head>
+
+<body>
+  <!-- <div class="weui-toptips weui-toptips_warn js_tooltips" id="errInfo">错误提示</div> -->
+  <div class="weui-cells weui-cells_form" style="margin-top: 25px">
+    <div class="weui-cell">
+      <div class="weui-cell__hd">
+        <label class="weui-label">警号</label>
+      </div>
+      <div class="weui-cell__bd">
+        <input class="weui-input" type="text" id="policeNum" name="policeNum" placeholder="请输入警号">
+      </div>
+    </div>
+  </div>
+  <div class="weui-cell weui-cell_switch">
+      <div class="weui-cell__bd">记住我的警号</div>
+      <div class="weui-cell__ft">
+        <input class="weui-switch" type="checkbox" id="isSave">
+      </div>
+    </div>
+  <div class="btn-wr">
+    <a href="javascript:;" class="weui-btn weui-btn_primary" id="bthLogin">登录</a>
+  </div>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/urlHead.js"></script>
+<script src="../js/jquery-weui.js"></script>
+<script>
+  $(function(){
+
+    // let errInfo = $("#errInfo")
+    
+    let isSave = window.localStorage.getItem("policeInfo") ? true : false;
+    console.log(isSave);
+    $('input#isSave').prop("checked", isSave)
+    $('input#isSave').on("change", function () {
+      isSave = $('input#isSave').prop("checked")
+        if(isSave){
+          window.localStorage.setItem("policeInfo",policeNum)
+        }else{
+          window.localStorage.removeItem("policeInfo")
+        }
+    })
+    if(isSave){
+      console.log(window.localStorage.getItem("policeInfo"));
+      $('input[name="policeNum"]').val(window.localStorage.getItem("policeInfo"))
+    }
+    $("#bthLogin").on("touchstart", function(){
+      console.log("enter touch");
+      let policeNum = $('input[name="policeNum"]').val().replace(/\s+/g, "");
+      if(policeNum == ""){
+        console.log("enter num null");
+        $.toptip('警号为空！', 'error');
+        // errTips("警号为空！")
+      }else{
+        console.log("enter ajax");
+        isSave = $('input#isSave').prop("checked")
+        if(isSave){
+          window.localStorage.setItem("policeInfo",policeNum)
+        }else{
+          window.localStorage.removeItem("policeInfo")
+        }
+        $.ajax({
+          type: "POST",
+          url: URL.testHead + URL.getDeptUser,
+          data: {
+            "policeNum": policeNum
+          },
+          dataType: "json",
+          success: function (res) {
+            // var  res = {"resultData":{"sceneld":"1","policeNum":"410104198506090036","name":"任重远","qrCodeUrl":"https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQEU8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyVDRtX1ZLU1I5N1AxMDAwMHcwNzgAAgRcrlBaAwQAAAAA"},"errCode":"0","msg":"成功"}
+            if (res.errCode == 0) {
+              window.localStorage.setItem("deptUser", JSON.stringify(res))
+              window.location.assign("./result.html")
+            } else {
+              $.alert(res.msg)
+            }
+          },
+          error:function(err){
+            $.toptip("网络错误，请检查网络后刷新！", 'error')
+            console.log(err);
+          },
+          complete: function(){
+            console.log("complete");
+          }
+        });
+      }
+    })
+    // function errTips(err) {
+    //   errInfo.text(err)
+    //   errInfo.addClass("tips-show")
+    //   setTimeout(function () {
+    //     errInfo.removeClass("tips-show")
+    //   }, 1500)
+    // }
+  })
+</script>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/weui.css">
+    <style>
+        .page,
+        body {
+            background-color: #f8f8f8;
+        }
+        
+        .page__hd {
+            padding: 15px;
+        }
+        
+        .page__title {
+            text-align: left;
+            font-size: 20px;
+            font-weight: 400;
+        }
+        
+        .page__desc {
+            margin-top: 5px;
+            color: #888;
+            text-align: left;
+            font-size: 14px;
+        }
+        
+        .page .page__bd {
+            padding: 0 15px;
+        }
+    </style>
+    <title>中转页</title>
+</head>
+
+<body>
+    <div class="page">
+        <div class="page__hd">
+            <h1 class="page__title">选择下一步操作</h1>
+        </div>
+        <div class="page__bd page__bd_spacing">
+            <button id="qrCodeLink" class="weui-btn weui-btn_primary">查看二维码</button>
+            <button id="detailsLink" class="weui-btn weui-btn_primary">查看推广信息</button>
+        </div>
+    </div>
+
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery-weui.js"></script>
+<script src="../js/urlHead.js"></script>
+<script>
+    $(function() {
+        let deptUser_str = window.localStorage.getItem("deptUser")
+        let deptUser_json = JSON.parse(deptUser_str)
+            // let deptUser_json = {
+            //   "resultData": {
+            //     "sceneld": "1",
+            //     "policeNum": "410104198506090036",
+            //     "name": "任重远",
+            //     "qrCodeUrl": "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQEU8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyVDRtX1ZLU1I5N1AxMDAwMHcwNzgAAgRcrlBaAwQAAAAA"
+            //   },
+            //   "errCode": "0",
+            //   "msg": "成功"
+            // }
+            // $.alert("alert")
+        let resultData = deptUser_json.resultData
+        $("#detailsLink").on("touchend", function() {
+            let sceneld = resultData.sceneld
+            window.location.assign("details_n.html?sceneld=" + sceneld)
+        })
+        $("#qrCodeLink").on("touchend", function() {
+            let qrCodeUrl = resultData.qrCodeUrl
+            let name = resultData.name
+            let policeNum = resultData.policeNum
+            window.location.assign("vCode.html?name=" + encodeURI(name) + "&qrCodeUrl=" + qrCodeUrl + "&policeNum=" + policeNum)
+        })
+    })
+</script>
+
+</html>

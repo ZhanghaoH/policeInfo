@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/share.css">
+    <title>二维码</title>
+    <style>
+        html,
+        body,
+        .container {
+            height: 100%;
+            background-color: #f8f8f8;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .img-vcode {
+            width: 240px;
+        }
+        
+        .text-link {
+            color: #0BB20C;
+            text-decoration: underline;
+        }
+        
+        .text-tips {
+            margin-bottom: 10px;
+        }
+        
+        .text-tips>div,
+        .text-tips>p {
+            margin-top: 10px;
+        }
+        
+        .text-strong {
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="img-wr">
+            <img src="../imgs/vCode.png" alt="警员对应二维码" id="vCode" class="img-vcode">
+        </div>
+        <div class="text-tips">
+            <p class="text-strong">扫码关注郑州警民通</p>
+            <div>
+                <p>推广人信息：</p>
+                <p style="margin-left: 10px">姓名：
+                    <span id="name"></span>
+                </p>
+                <p style="margin-left: 10px">警号：
+                    <span id="policeNum"></span>
+                </p>
+            </div>
+            <!-- <div class="text-link" id="detailsLink">点击查看推广详情</div> -->
+            <!-- <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+      </div> -->
+            <!-- <div class="soshm"></div> -->
+            <!-- <!-- <button id="shareBtn" class="weui-btn weui-btn_primary" style="margin-top: 15px">分享</button> -->
+        </div>
+        <div id="socialShare"></div>
+        <!-- <script src="../js/soshm.js"></script> -->
+    </div>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/urlHead.js"></script>
+<script src="../js/share.js"></script>
+<script>
+    $(function() {
+
+        // let deptUser_str = window.localStorage.getItem("deptUser")
+        // let deptUser_json = JSON.parse(deptUser_str)
+        // let deptUser_json = {
+        //   "resultData": {
+        //     "sceneld": "1",
+        //     "policeNum": "410104198506090036",
+        //     "name": "任重远",
+        //     "qrCodeUrl": "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQEU8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyVDRtX1ZLU1I5N1AxMDAwMHcwNzgAAgRcrlBaAwQAAAAA"
+        //   },
+        //   "errCode": "0",
+        //   "msg": "成功"
+        // }
+        // let resultData = deptUser_json.resultData
+        let qrCodeUrl = getQueryString("qrCodeUrl")
+        let policeNum = getQueryString("policeNum")
+        let name = decodeURI(getQueryString("name"))
+        console.log(name)
+
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return decodeURI(r[2]);
+            }
+            return null;
+        }
+        $("#vCode").prop("src", qrCodeUrl)
+        $("#name").text(name)
+        $("#policeNum").text(policeNum)
+
+        // $("#detailsLink").on("touchend", function () {
+        //   let sceneld = resultData.sceneld
+        //   window.location.assign("details.html?sceneld=" + sceneld)
+        // })
+        // document.getElementById('shareBtn').addEventListener('click', function() {
+        //       soshm.popIn({
+        //         title: '分享',
+        //         sites: ['weixin', 'weixintimeline', 'weibo', 'yixin', 'qzone', 'tqq', 'qq']
+        //       });
+        //     }, false);
+        //   soshm('#share', {
+        //   // 分享的链接，默认使用location.href
+        //   url: resultData.qrCodeUrl,
+        //   // 分享的标题，默认使用document.title
+        //   title: '欢迎关注郑州警民通',
+        //   // 分享的摘要，默认使用<meta name="description" content="">content的值
+        //   digest: '欢迎关注郑州警民通',
+        //   // 分享的图片，默认获取本页面第一个img元素的src
+        //   pic: '',    // 默认显示的网站为以下六个个,支持设置的网站有
+        //   // weixin,weixintimeline,qq,qzone,yixin,weibo,tqq,renren,douban,tieba
+        //   sites: ['weixin', 'weixintimeline', 'yixin', 'weibo', 'qq', 'qzone']
+        // });
+        $("#socialShare").socialShare({
+            content: "欢迎关注郑州警民通",
+            url: qrCodeUrl,
+            titile: "欢迎关注郑州警民通"
+        });
+        // $(".msb_main").trigger('click');
+
+        // window._bd_share_config = {
+        //   "common": {
+        //     "bdSnsKey": {},
+        //     "bdText": "",
+        //     "bdText": '欢迎关注郑州警民通',
+        //     // "bdDesc": '自定义分享摘要',
+        //     "bdUrl": resultData.qrCodeUrl,
+        //     // "bdPic": '自定义分享图片',
+        //     "bdMini": "1",
+        //     "bdMiniList": false,
+        //     "bdPic": "",
+        //     "bdStyle": "1",
+        //     "bdSize": "24"
+        //   },
+        //   "share": {
+
+        //   },
+        //   "image": {
+        //     "viewList": ["weixin", "qzone", "tsina", "tqq", "renren"],
+        //     "viewText": "分享到：",
+        //     "viewSize": "24"
+        //   },
+        //   "selectShare": {
+        //     "bdContainerClass": null,
+        //     "bdSelectMiniList": ["weixin", "qzone", "tsina", "tqq", "renren"]
+        //   }
+        // };
+        // with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src =
+        // 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+    })
+</script>
+
+</html>

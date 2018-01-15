@@ -188,12 +188,14 @@
 <script src="../js/jquery-weui.js"></script>
 <script src="../js/urlHead.js"></script>
 <script src="../js/mescroll.min.js"></script>
+<script src="../js/base.js"></script>
 <script>
     $(function() {
         let pageNum = 0;
         let isRefresh = false
         const infoList = $("#infoList")
         let sceneld = getQueryString("sceneld")
+        // console.log(sceneld);
         let count = 0
         let durationNum = 0
 
@@ -364,7 +366,7 @@
             var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
             var r = window.location.search.substr(1).match(reg);
             if (r != null) {
-                return decodeURI(r[2]);
+                return Base.decode(r[2]);
             }
             return null;
         }

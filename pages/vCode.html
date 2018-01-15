@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../css/weui.css">
     <link rel="stylesheet" href="../css/share.css">
-    <title>二维码</title>
+    <title>信息</title>
     <style>
         html,
         body,
@@ -59,9 +59,9 @@
                 <p style="margin-left: 10px">姓名：
                     <span id="name"></span>
                 </p>
-                <p style="margin-left: 10px">警号：
+                <!-- <p style="margin-left: 10px">警号：
                     <span id="policeNum"></span>
-                </p>
+                </p> -->
             </div>
             <!-- <div class="text-link" id="detailsLink">点击查看推广详情</div> -->
             <!-- <div class="bdsharebuttonbox">
@@ -82,6 +82,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/urlHead.js"></script>
 <script src="../js/share.js"></script>
+<script src="../js/base.js"></script>
 <script>
     $(function() {
 
@@ -100,21 +101,26 @@
         // let resultData = deptUser_json.resultData
         let qrCodeUrl = getQueryString("qrCodeUrl")
         let policeNum = getQueryString("policeNum")
-        let name = decodeURI(getQueryString("name"))
+        let name = Base.decode(getQueryString("name"))
+        let nameLen = name.length
         console.log(name)
 
         function getQueryString(name) {
             var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
             var r = window.location.search.substr(1).match(reg);
             if (r != null) {
-                return decodeURI(r[2]);
+                return Base.decode(r[2]);
             }
             return null;
         }
         $("#vCode").prop("src", qrCodeUrl)
-        $("#name").text(name)
+        let showName = repeatX('*', nameLen - 1) + name.charAt(nameLen - 1)
+        $("#name").text(showName)
         $("#policeNum").text(policeNum)
-
+        console.log(showName)
+        function repeatX(str, num) {
+            return num > 1 ? str + repeatX(str, --num) : str
+        }
         // $("#detailsLink").on("touchend", function () {
         //   let sceneld = resultData.sceneld
         //   window.location.assign("details.html?sceneld=" + sceneld)
